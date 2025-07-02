@@ -1,0 +1,13 @@
+Numero de Factura: 01
+Tipus Factura: Marisc
+Pagador: Entitat 1 S.A
+Dades_Pagador: Vall dels caiguts retrassats 08750
+Emisor: Entitat 2 S.L
+Dades_Emisor: Vall dels Pujats malparlats 08750
+Data: 13-12-2002
+Producte 1: Tela_Marinera
+Import 1:  100.50
+Producte 2: Dierna
+Import 2: 30
+Producte 3: Equipatge
+Import 3: 20

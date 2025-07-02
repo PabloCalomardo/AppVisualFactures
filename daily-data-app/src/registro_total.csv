@@ -1,0 +1,4 @@
+NumeroFactura,TipusFactura,Pagador,DadesPagador,Emisor,DadesEmisor,Data,Productes,Imports
+1,Marisc,Entitat 1 S.A,Vall dels caiguts retrassats 08750,Entitat 2 S.L,Vall dels Pujats malparlats 08750,13-12-2002,"Tela_Marinera, Dierna, Equipatge","100.50, 30, 20"
+1,Marisc,Entitat 1 S.A,Vall dels caiguts retrassats 08750,Entitat 2 S.L,Vall dels Pujats malparlats 08750,13-12-2002,"Tela_Marinera, Dierna, Equipatge","100.50, 30, 20"
+01,Marisc,Entitat 1 S.A,Vall dels caiguts retrassats 08750,Entitat 2 S.L,Vall dels Pujats malparlats 08750,13-12-2002,"Tela_Marinera, Dierna, Equipatge","100.50, 30, 20"
