@@ -59,9 +59,10 @@ class DataManager:
         self.save_csv()
 
     def edit_data(self):
-        edited_df = st.data_editor(self.data, num_rows="dynamic")
-        if st.button("Desa canvis a CSV"):
-            self.data = edited_df
+        # Permet editar i esborrar files directament amb Streamlit Data Editor
+        edited_df = st.data_editor(self.data, num_rows="dynamic", use_container_width=True, key="data_editor")
+        if st.button("Desa canvis al CSV"):
+            self.data = edited_df.reset_index(drop=True)
             self.save_csv()
             st.success("Canvis desats correctament!")
 

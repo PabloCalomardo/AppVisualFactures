@@ -14,5 +14,11 @@ if uploaded_file is not None:
     data_manager.load_data_from_txt(uploaded_file)
     st.success("Fitxer carregat correctament!")
 
-if st.button("Mostrar Dashboard"):
-    dashboard.show()
+st.header("Gestió i edició de dades")
+data_manager.edit_data()
+
+dashboard.show()
+
+st.header("Visualització de dades")
+df = data_manager.get_data()
+st.dataframe(df)

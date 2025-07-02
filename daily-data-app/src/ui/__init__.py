@@ -1,1 +1,1 @@
-# This file is intentionally left blank.
+from .dashboard import Dashboard
