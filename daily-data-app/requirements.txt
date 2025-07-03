@@ -5,3 +5,9 @@ numpy
 requests
 folium
 streamlit-folium
+plotly
+streamlit-desktop-app
+pywebview
+# pyobjc només per a macOS. Instal·la manualment amb:
+# python3 -m pip install --upgrade pip setuptools wheel
+# python3 -m pip install pyobjc
