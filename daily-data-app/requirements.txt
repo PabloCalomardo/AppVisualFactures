@@ -8,6 +8,13 @@ streamlit-folium
 plotly
 streamlit-desktop-app
 pywebview
+pdfplumber
+pytesseract
+Pillow
+pdf2image
+ollama  # Per a integració amb model local Llama3
+# REQUEREIX OBLIGATÒRIAMENT UN TOKEN DE HUGGINGFACE (HF_TOKEN) per a l'extracció intel·ligent de factures.
+# Consulta el fitxer README_LLM_HF.txt per obtenir i configurar el teu token personal.
 # pyobjc només per a macOS. Instal·la manualment amb:
 # python3 -m pip install --upgrade pip setuptools wheel
 # python3 -m pip install pyobjc

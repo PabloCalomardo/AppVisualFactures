@@ -25,6 +25,10 @@ class Dashboard:
     def show(self):
         st.header("Gràfic interactiu per Pagador i mapa per ubicació d'Emisor")
         df = self.data_manager.get_data()
+        # DEBUG: Mostra la darrera resposta crua de l'LLM local si existeix
+        if hasattr(self.data_manager, 'last_llm_response') and self.data_manager.last_llm_response:
+            with st.expander("Resposta crua del model local (debug)"):
+                st.code(self.data_manager.last_llm_response, language='json')
         if df.empty:
             st.info("No hi ha dades per mostrar.")
             return
