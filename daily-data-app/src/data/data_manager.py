@@ -8,6 +8,8 @@ from PIL import Image
 import requests
 import pdf2image
 import json, re
+import ollama
+
 
 class DataManager:
     def __init__(self):
@@ -99,12 +101,10 @@ class DataManager:
             "- EmailEmisor: El correu electrònic de l’emissor.\n"
             "- Data: La data d’emissió de la factura.\n"
             "- Productes: Una llista plana, separada per comes, amb el nom de cada producte o servei facturat.\n"
-            "- Imports: Una llista plana, separada per comes, amb l’import corresponent a cada producte o servei, en el mateix ordre que a Productes.\n"
-            "Si algun camp no existeix, escriu 'BUIT'. Retorna només l’objecte JSON.\n"
+            "- Imports: Una llista plana, separada per comes, amb l’import corresponent a cada producte o servei, en el mateix ordre que a Productes. ÉS IMPORTANT QUE ELS IMPORTS APAREGUIN AMB SÍMBOL CORRESPONENT DE MONEDA, € $ O £ devant de l'import, ja que mes endevant es fara una conversió\n"
             "El text de la factura és:\n" + text
         )
         try:
-            import ollama
             print("[Ollama] Enviant prompt a model local llama3...")
             response = ollama.chat(
                 model='llama3',
