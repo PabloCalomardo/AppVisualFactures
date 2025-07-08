@@ -68,17 +68,18 @@ class Dashboard:
                 min_mes = mesos[0].to_timestamp().to_pydatetime()
                 max_mes = mesos[-1].to_timestamp().to_pydatetime()
                 # Slider amb rang de mesos
-                slider_value = st.slider(
-                    "Selecciona rang de mesos",
-                    min_value=min_mes,
-                    max_value=max_mes,
-                    value=(min_mes, max_mes),
-                    format="%B %Y"
-                )
-                # Filtra el dataframe segons el rang seleccionat
-                start, end = pd.to_datetime(slider_value[0]), pd.to_datetime(slider_value[1])
-                mask = (df[data_col] >= start) & (df[data_col] <= end + pd.offsets.MonthEnd(0))
-                df = df[mask]
+                if(min_mes < max_mes):
+                    slider_value = st.slider(
+                        "Selecciona rang de mesos",
+                        min_value=min_mes,
+                        max_value=max_mes,
+                        value=(min_mes, max_mes),
+                        format="%B %Y"
+                    )
+                    # Filtra el dataframe segons el rang seleccionat
+                    start, end = pd.to_datetime(slider_value[0]), pd.to_datetime(slider_value[1])
+                    mask = (df[data_col] >= start) & (df[data_col] <= end + pd.offsets.MonthEnd(0))
+                    df = df[mask]
         # Comprovació robusta de columnes essencials
         for col in ['Imports', 'Productes']:
             if col not in df.columns:

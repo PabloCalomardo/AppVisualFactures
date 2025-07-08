@@ -1,4 +1,3 @@
 NumeroFactura,TipusFactura,Pagador,DadesPagador,AdrecaPagador,EmailPagador,Emisor,DadesEmisor,AdrecaEmisor,EmailEmisor,Data,Productes,Imports
-INV-3337,Servei,Test Business,,"123 Somewhere St, Melbourne, VIC 3000",lest@test.com,DEMO - Sliced Invoices,"CERES, ACC # 1234 1234, BSB # 4321 432","Suite 5A-1204, Your City AZ 08750",admin@slicedinvoices.com,"January 25, 2016",['Web Design'],['$85.00']
-02,Peix,Entitat 1 S.A,,Vall dels caiguts retrassats 08750,,Entitat 3 S.I,,Vall dels Pujats malparlats 08750,,14-12-2002,"PeixBullit1, PeixFeuco, PeixMolon","100.50, 30, 20"
-02,Peix,Entitat 1 S.A,,Vall dels caiguts retrassats 08750,,Entitat 3 S.I,,Vall dels Pujats malparlats 08750,,14-12-2002,"PeixBullit1, PeixFeuco, PeixMolon","100.50, 30, 20"
+INV-3337,Servei,Test Business,,"123 Somewhere St, Melbourne, VIC 3000",lest@test.com,DEMO - Sliced Invoices,{'CERES': True},,admin@slicedinvoices.com,"January 25, 2016",['Web Design'],['€85.00']
+INV-3337,Servei,Test Business,,"123 Somewhere St, Melbourne, VIC 3000",lest@test.com,DEMO - Sliced Invoices,,Suite 5A-1204 CERES ANZ Bank ACC # 1234 1234 BSB # 4321 432,admin@slicedinvoices.com,"January 25, 2016","""Web Design""","""$85.00"""

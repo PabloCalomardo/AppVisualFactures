@@ -84,7 +84,7 @@ class DataManager:
         self.save_csv()
 
     def extract_fields_llm(self, text):
-        # Extracció de camps amb Ollama local (llama3) i prompt enriquit
+        # Extracció de camps amb Ollama local i prompt enriquit
         print("extract_fields_llm (Ollama):", text)
         prompt = (
             "Ets un assistent expert en facturació. Analitza el següent text extret d'una factura (pot contenir errors d'OCR o estar desordenat). "
@@ -101,13 +101,13 @@ class DataManager:
             "- EmailEmisor: El correu electrònic de l’emissor.\n"
             "- Data: La data d’emissió de la factura.\n"
             "- Productes: Una llista plana, separada per comes, amb el nom de cada producte o servei facturat.\n"
-            "- Imports: Una llista plana, separada per comes, amb l’import corresponent a cada producte o servei, en el mateix ordre que a Productes. ÉS IMPORTANT QUE ELS IMPORTS APAREGUIN AMB SÍMBOL CORRESPONENT DE MONEDA, € $ O £ devant de l'import, ja que mes endevant es fara una conversió\n"
+            "- Imports: Una llista plana, separada per comes, amb l’import corresponent a cada producte o servei, en el mateix ordre que a Productes, com a exemple de resultat: ['€85.00','€34.00' ... ] . ÉS IMPORTANT QUE ELS IMPORTS APAREGUIN AMB SÍMBOL CORRESPONENT DE MONEDA, € $ O £ devant de l'import, ja que mes endevant es fara una conversió\n"
             "El text de la factura és:\n" + text
         )
         try:
-            print("[Ollama] Enviant prompt a model local llama3...")
+            print("[Ollama] Enviant prompt a model local deepseek...")
             response = ollama.chat(
-                model='llama3',
+                model='deepseek-r1',    #Tenim instalats deepselk-r1 i llama3
                 messages=[
                     {'role': 'system', 'content': 'Ets un assistent expert en facturació.'},
                     {'role': 'user', 'content': prompt}
