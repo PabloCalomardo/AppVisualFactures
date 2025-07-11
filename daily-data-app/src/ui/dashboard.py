@@ -4,7 +4,7 @@ import requests
 import folium
 from streamlit_folium import st_folium
 import ast
-import plotly.express as px
+import plotly.express as px  # <-- Assegura import global
 import calendar
 
 class Dashboard:
@@ -67,19 +67,42 @@ class Dashboard:
             if mesos:
                 min_mes = mesos[0].to_timestamp().to_pydatetime()
                 max_mes = mesos[-1].to_timestamp().to_pydatetime()
-                # Slider amb rang de mesos
-                if(min_mes < max_mes):
-                    slider_value = st.slider(
+                mesos_options = [m.to_timestamp().to_pydatetime() for m in mesos]
+                mesos_labels = [f"{calendar.month_name[m.month]} {m.year}" for m in mesos]
+                idx_min = 0
+                idx_max = len(mesos_options) - 1
+                if idx_max > idx_min:
+                    selected_range = st.slider(
                         "Selecciona rang de mesos",
-                        min_value=min_mes,
-                        max_value=max_mes,
-                        value=(min_mes, max_mes),
-                        format="%B %Y"
+                        min_value=idx_min,
+                        max_value=idx_max,
+                        value=(idx_min, idx_max),
+                        format=None,
+                        step=1,
+                        key="slider_mesos"
                     )
-                    # Filtra el dataframe segons el rang seleccionat
-                    start, end = pd.to_datetime(slider_value[0]), pd.to_datetime(slider_value[1])
+                    mesos_seleccionats = mesos_options[selected_range[0]:selected_range[1]+1]
+                    mesos_labels_seleccionats = mesos_labels[selected_range[0]:selected_range[1]+1]
+                    start, end = mesos_seleccionats[0], mesos_seleccionats[-1]
                     mask = (df[data_col] >= start) & (df[data_col] <= end + pd.offsets.MonthEnd(0))
                     df = df[mask]
+                    st.markdown(
+                        '<div style="margin-bottom: 0.5rem;">' +
+                        ' '.join([f'<span style="background-color:#e6f7b6; color:#333; border-radius:8px; padding:4px 10px; margin-right:4px; font-size:0.95em;">{m}</span>' for m in mesos_labels_seleccionats]) +
+                        '</div>', unsafe_allow_html=True
+                    )
+                else:
+                    # Només hi ha un mes disponible, mostra'l sense slider
+                    mesos_seleccionats = mesos_options
+                    mesos_labels_seleccionats = mesos_labels  # CORRECCIÓ: variable ben escrita
+                    start, end = mesos_seleccionats[0], mesos_seleccionats[-1]
+                    mask = (df[data_col] >= start) & (df[data_col] <= end + pd.offsets.MonthEnd(0))
+                    df = df[mask]
+                    st.markdown(
+                        '<div style="margin-bottom: 0.5rem;">' +
+                        ' '.join([f'<span style="background-color:#e6f7b6; color:#333; border-radius:8px; padding:4px 10px; margin-right:4px; font-size:0.95em;">{m}</span>' for m in mesos_labels_seleccionats]) +
+                        '</div>', unsafe_allow_html=True
+                    )
         # Comprovació robusta de columnes essencials
         for col in ['Imports', 'Productes']:
             if col not in df.columns:
@@ -240,3 +263,61 @@ class Dashboard:
             .folium-map {margin-bottom: 0px !important;}
             </style>
         ''', unsafe_allow_html=True)
+
+        # --- RESUM GENERAL DE DADES ---
+        st.header("RESUM GENERAL DE DADES")
+        st.subheader("Resum general")
+        if not df.empty:
+            # Conversió de Data i Import
+            if 'Data' in df.columns:
+                df['Data'] = pd.to_datetime(df['Data'], errors='coerce', dayfirst=True)
+            def suma_imports(x):
+                try:
+                    # Accepta llistes, cadenes amb comes, i elimina símbols
+                    if isinstance(x, list):
+                        return sum(float(str(i).replace('€','').replace('$','').replace(',','.')) for i in x if str(i).strip())
+                    elif isinstance(x, str) and x.strip().startswith('['):
+                        import ast
+                        l = ast.literal_eval(x)
+                        return sum(float(str(i).replace('€','').replace('$','').replace(',','.')) for i in l if str(i).strip())
+                    else:
+                        return sum(float(str(i).replace('€','').replace('$','').replace(',','.')) for i in str(x).split(',') if str(i).strip())
+                except Exception:
+                    return 0
+            if 'Imports' in df.columns:
+                df['TotalFactura'] = df['Imports'].apply(suma_imports)
+            else:
+                df['TotalFactura'] = 0
+            # Gastos totals mensuals
+            if 'Data' in df.columns:
+                df['Mes'] = df['Data'].dt.to_period('M').astype(str)
+            else:
+                df['Mes'] = ''
+            gastos_mensuals = df.groupby('Mes')['TotalFactura'].sum().reset_index()
+            st.metric("Gasto total", f"{df['TotalFactura'].sum():.2f} €")
+            st.metric("Gasto mensual mitjà", f"{gastos_mensuals['TotalFactura'].mean():.2f} €")
+            st.subheader("Gastos totals mensuals")
+            # Omple mesos sense dades amb 0
+            if not gastos_mensuals.empty:
+                # Troba el rang complet de mesos entre el primer i l'últim
+                idx = pd.period_range(start=gastos_mensuals['Mes'].min(), end=gastos_mensuals['Mes'].max(), freq='M')
+                idx_str = idx.astype(str)
+                gastos_mensuals = gastos_mensuals.set_index('Mes').reindex(idx_str, fill_value=0).reset_index().rename(columns={'index': 'Mes'})
+            fig = px.line(gastos_mensuals, x='Mes', y='TotalFactura', markers=True, labels={'Mes':'Mes','TotalFactura':'Gasto (€)'}, title='Gasto total per mes')
+            st.plotly_chart(fig, use_container_width=True)
+            # Percentatge per categoria
+            if 'TipusFactura' in df.columns:
+                per_categoria = df.groupby('TipusFactura')['TotalFactura'].sum().reset_index()
+                per_categoria['Percentatge'] = 100 * per_categoria['TotalFactura'] / per_categoria['TotalFactura'].sum()
+                st.subheader("Percentatge de gasto per categoria")
+                fig2 = px.pie(per_categoria, names='TipusFactura', values='TotalFactura', title='Distribució per categoria', hole=0.4)
+                st.plotly_chart(fig2, use_container_width=True)
+                st.dataframe(per_categoria[['TipusFactura','TotalFactura','Percentatge']].round(2))
+            # Percentatge per emisor
+            if 'Emisor' in df.columns:
+                per_emisor = df.groupby('Emisor')['TotalFactura'].sum().reset_index()
+                per_emisor['Percentatge'] = 100 * per_emisor['TotalFactura'] / per_emisor['TotalFactura'].sum()
+                st.subheader("Percentatge de gasto per emisor")
+                st.dataframe(per_emisor[['Emisor','TotalFactura','Percentatge']].round(2))
+        else:
+            st.info("No hi ha dades per mostrar.")

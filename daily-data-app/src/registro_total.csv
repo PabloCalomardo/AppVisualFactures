@@ -1,3 +1,5 @@
 NumeroFactura,TipusFactura,Pagador,DadesPagador,AdrecaPagador,EmailPagador,Emisor,DadesEmisor,AdrecaEmisor,EmailEmisor,Data,Productes,Imports
-INV-3337,Servei,Test Business,,"123 Somewhere St, Melbourne, VIC 3000",lest@test.com,DEMO - Sliced Invoices,{'CERES': True},,admin@slicedinvoices.com,"January 25, 2016",['Web Design'],['€85.00']
-INV-3337,Servei,Test Business,,"123 Somewhere St, Melbourne, VIC 3000",lest@test.com,DEMO - Sliced Invoices,,Suite 5A-1204 CERES ANZ Bank ACC # 1234 1234 BSB # 4321 432,admin@slicedinvoices.com,"January 25, 2016","""Web Design""","""$85.00"""
+INV-3337,Invoice,Test Business,,"123 Somewhere St Melbourne, VIC 3000",lest@test.com,DEMO - Sliced Invoices,© iced voices,,admin@slicedinvoices.com,"January 25, 2016",['Web Design'],['$85.00']
+98765,Desarrollo Web,PRUEBASED GARCIA PROBERO,NIF/CIF: 77777777B,,,PROBERO PROBANDO HERNANDEZ,NIF/CIF: X0000000T,"Calle y número de mi empresa
+MI LOCALIDAD
+99999 MI PROVINCIA",,24-11-2012,"[""ARTICULO ESPECIFICO CON EL NOMBRE QUE SEA"", ""OTRO ARTICULO, AQUÍ PONDRA SU DESCRIPCION""]","[""€900.00"", ""€126.00""]"
